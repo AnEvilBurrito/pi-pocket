@@ -30,6 +30,30 @@ export type SessionMeta = {
     worktree?: Worktree;
 };
 
+/** Completed Pi imports, keyed by source snapshot, branch, and destination settings. */
+export const SessionImportsDoc = defineDoc<{ items: Record<string, number> }>({
+    kind: "pocket.session-imports",
+    version: 1,
+    scope: "session",
+    initial: () => ({ items: {} }),
+});
+
+/** A read-only source archive of an imported branch; never replayed as extension state. */
+export const SessionSourceDoc = defineDoc<{
+    jsonl: string;
+    sessionId: string;
+    snapshot: string;
+    leafId: string;
+    warnings: string[];
+}>({
+    kind: "pocket.session-source",
+    version: 1,
+    scope: "conversation",
+    history: "latest",
+    fork: "current",
+    initial: () => ({ jsonl: "", sessionId: "", snapshot: "", leafId: "", warnings: [] }),
+});
+
 /** The catalogue of user-facing sessions: ownerless conversations created by the app. Subagents are not listed. */
 export const SessionsDoc = defineDoc<{ items: Record<string, SessionMeta> }>({
     kind: "pocket.sessions",

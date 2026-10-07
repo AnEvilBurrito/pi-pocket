@@ -87,6 +87,15 @@ export function Splash() {
                     <${Icon} name="plus" size=${16} /> New session <${Keys} keys="Alt N" />
                 </button>`
             }
+            ${
+                me?.role === "owner" &&
+                html`<button
+                    class="button"
+                    onClick=${() => openSheet({ type: "import-pi" })}
+                >
+                    Import from Pi
+                </button>`
+            }
             <button class="button" onClick=${() => store.set({ launcher: true })}>
                 <${Icon} name="command" size=${16} /> Launcher <${Keys} keys="Mod K" />
             </button>

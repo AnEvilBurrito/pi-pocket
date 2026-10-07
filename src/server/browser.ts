@@ -393,6 +393,9 @@ export class Browsers {
             return;
         }
 
+        // A launcher script may own a separate browser child: ask the browser itself to exit before
+        // killing the launcher, so its inherited pipes and descendants do not remain alive.
+        await chromium.connection.send("Browser.close", {}, undefined, 1000).catch(() => {});
         chromium.kill();
         await Promise.race([chromium.exited, wait(4000)]);
     }

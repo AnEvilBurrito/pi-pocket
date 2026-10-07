@@ -115,6 +115,7 @@ export function MenuSheet() {
                 <span class="muted small">the whole history</span>
             </a>`
         }
+        ${conversation && item("Continue in terminal Pi", () => openSheet({ type: "export-pi" }), "download a new Pi session")}
         ${
             session &&
             steer &&
@@ -144,6 +145,7 @@ export function MenuSheet() {
             ${collab() && item("Notifications", () => openSheet({ type: "notifications" }), "Pi finished, approvals, chat")}
             ${item("Running now", () => openSheet({ type: "running" }), "everything Pi is doing")}
             ${item("Spend", () => openSheet({ type: "spend" }), me?.role === "owner" ? "by person and session, limits" : "yours")}
+            ${me?.role === "owner" && item("Import from Pi", () => openSheet({ type: "import-pi" }), "browse local Pi conversations")}
             ${item("Providers", () => openSheet({ type: "providers" }))}
             ${item("Extensions", () => openSheet({ type: "extensions" }), store.state.guard?.enabled ? "Lancet Guard on" : store.state.guard?.available ? "Lancet Guard off" : "")}
             ${

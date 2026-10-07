@@ -269,6 +269,33 @@ export async function conversationRoutes(
         return json(response, 200, entry);
     }
 
+    if (third === "export-pi" && method === "GET") {
+        const { filename, jsonl, warnings, sourceAvailable } = await app.sessionBridge.exportPi(
+            user,
+            id,
+        );
+
+        if (url.searchParams.get("preview") === "1") {
+            return json(response, 200, { filename, warnings, sourceAvailable });
+        }
+
+        return send(response, 200, jsonl, "application/x-ndjson; charset=utf-8", {
+            "content-disposition": `attachment; filename="${filename}"`,
+        });
+    }
+
+    if (third === "source-pi" && method === "GET") {
+        return send(
+            response,
+            200,
+            await app.sessionBridge.sourceArchive(user, id),
+            "application/x-ndjson; charset=utf-8",
+            {
+                "content-disposition": `attachment; filename="source-${Number(id)}.jsonl"`,
+            },
+        );
+    }
+
     if (third === "export" && method === "GET") {
         const { filename, markdown } = await app.transcripts.exportMarkdown(id, user);
 

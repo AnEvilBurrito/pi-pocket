@@ -21,6 +21,7 @@ import type { User } from "../config.ts";
 import { HttpError } from "../errors.ts";
 import { desktopTheme, wallpaperFile } from "../omarchy.ts";
 import { runningNow } from "../running.ts";
+import type { ImportRequest } from "../session-bridge.ts";
 import { serveImage } from "./assets.ts";
 import { browserRoutes } from "./browser-routes.ts";
 import { conversationRoutes } from "./conversation-routes.ts";
@@ -252,6 +253,36 @@ export function createApi(options: HttpOptions, auth: Auth) {
             }
 
             return json(response, 200, app.spend.summary(user));
+        }
+
+        if (first === "pi-sessions") {
+            requireOwner(user);
+
+            if (second === undefined && method === "GET") {
+                return json(response, 200, await app.sessionBridge.list(user));
+            }
+
+            if (second === "preview" && method === "GET") {
+                return json(
+                    response,
+                    200,
+                    await app.sessionBridge.preview(
+                        user,
+                        url.searchParams.get("source") ?? "",
+                        url.searchParams.get("leafId") ?? undefined,
+                    ),
+                );
+            }
+
+            if (second === "import" && method === "POST") {
+                return json(
+                    response,
+                    200,
+                    await app.sessionBridge.import(user, await readJson<ImportRequest>(request)),
+                );
+            }
+
+            throw new HttpError(404, "No such Pi session route");
         }
 
         if (first === "sessions" && second === undefined && method === "GET") {

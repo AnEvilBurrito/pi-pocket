@@ -13,6 +13,7 @@ import { MenuSheet } from "./sheets/menu.js";
 import { MessageSheet } from "./sheets/message.js";
 import { ModelPicker } from "./sheets/model.js";
 import { InviteSheet, PeopleSheet } from "./sheets/people.js";
+import { PiExportSheet, PiImportSheet } from "./sheets/pi-sessions.js";
 import { AuthDialog, ProvidersSheet } from "./sheets/providers.js";
 import { RunningSheet } from "./sheets/running.js";
 import { SchedulesSheet } from "./sheets/schedules.js";
@@ -68,6 +69,12 @@ function sheetBody(sheet) {
             body = view.conversation
                 ? html`<${ArtifactViewer} id=${sheet.id} version=${sheet.version} />`
                 : null;
+            break;
+        case "import-pi":
+            body = me?.role === "owner" ? html`<${PiImportSheet} />` : null;
+            break;
+        case "export-pi":
+            body = view.conversation ? html`<${PiExportSheet} />` : null;
             break;
         case "providers":
             body = html`<${ProvidersSheet} />`;

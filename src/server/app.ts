@@ -74,6 +74,7 @@ import { type ExtensionInfo, ExtensionLoader, prepareDropInFolder } from "./relo
 import { ResendTask } from "./resend.ts";
 import { type Client, Room, ROOM_DOCS } from "./room.ts";
 import { Schedules } from "./schedules.ts";
+import { SessionBridge } from "./session-bridge.ts";
 import { Shell } from "./shell.ts";
 import { Spend } from "./spend.ts";
 import { Transcripts } from "./transcripts.ts";
@@ -141,6 +142,8 @@ export class PocketApp {
     readonly workspace = new Workspace(this);
     /** The conversation's stored history, as people read it. */
     readonly transcripts = new Transcripts(this);
+    /** Read-only Pi session discovery and independent imports/exports. */
+    readonly sessionBridge = new SessionBridge(this);
     /** Each conversation's browser page, which Pi and the people in the conversation share. */
     readonly browsers: Browsers;
     readonly #clients = new Set<Client>();
